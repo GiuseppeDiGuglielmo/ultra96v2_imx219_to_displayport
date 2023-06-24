@@ -53,7 +53,7 @@ ifeq (${BOARD}, ultra96v2)
 endif
 ifeq (${BOARD}, kv260)
     BD_SRC = \
-    	bd/imx219_to_kria_displayport_vivado2021.2.tcl
+    	bd/imx219_to_kria_displayport_vivado2023.1.tcl
     	
     XDC_SRC = \
     	constraints/Kria_KV_CarrierCard_Rev1.xdc
