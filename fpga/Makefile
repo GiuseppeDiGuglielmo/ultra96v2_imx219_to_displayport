@@ -39,42 +39,42 @@ uname_O := $(shell sh -c 'uname -o 2>/dev/null || echo not')
 BOARD = kv260
 
 RTL_SRC = \
-	
+
 SIM_SRC = \
-	
+
 IP_SRC = \
 
 ifeq (${BOARD}, ultra96v2)
-    BD_SRC = \
-    	bd/imx219_to_ultra96v2_displayport_vivado2021.1.tcl
-    	
-    XDC_SRC = \
-    	constraints/Ultra96_V2_constraints_190430.xdc
+	BD_SRC = \
+		bd/imx219_to_ultra96v2_displayport_vivado2021.1.tcl
+
+	XDC_SRC = \
+		constraints/Ultra96_V2_constraints_190430.xdc
 endif
 ifeq (${BOARD}, kv260)
-    BD_SRC = \
-    	bd/imx219_to_kria_displayport_vivado2023.1.tcl
-    	
-    XDC_SRC = \
-    	constraints/Kria_KV_CarrierCard_Rev1.xdc
+	BD_SRC = \
+		bd/imx219_to_kria_displayport_vivado2023.2.tcl
+
+	XDC_SRC = \
+		constraints/Kria_KV_CarrierCard_Rev1.xdc
 endif
-	
+
 INC_DIR0 = \
 	modules/
-	
+
 SIM_LIB = \
-	
+
 compile: compile_sim_lib
 	test -e work || vlib work
 	vlog -incr $(SIM_SRC) $(RTL_SRC) +define+SIM +incdir+$(INC_DIR0)
-	
+
 compile_sim_lib:
-	test -e sim_lib || (vlib sim_lib && vlog -work sim_lib -incr $(SIM_LIB))	
-		 
+	test -e sim_lib || (vlib sim_lib && vlog -work sim_lib -incr $(SIM_LIB))
+
 sim: compile-eval
 	vsim -L sim_lib -c imx219_to_mpsoc_displayport_tb glbl -do "run -a"
-	
-# Launch the Modelsim GUI for debugging design		
+
+# Launch the Modelsim GUI for debugging design
 sim-debug: compile
 ifneq (, $(findstring Cygwin, $(uname_O)))
 	cygstart vsim -L sim_lib imx219_to_mpsoc_displayport_tb glbl -voptargs=+acc
@@ -83,26 +83,26 @@ else
 endif
 
 bd: build/design_1/design_1.bd
-	
+
 syn: build/post_syn.dcp
 
 place: build/post_place.dcp
 
 route: build/post_route.dcp
 
-bitstream: build/imx219_to_mpsoc_displayport.bit
+bitstream: build/imx219_to_mpsoc_displayport.xsa
 
-program: build/imx219_to_mpsoc_displayport.bit
+program: build/imx219_to_mpsoc_displayport.xsa
 	vivado -mode batch -source scripts/vivado_program.tcl -log build/program_log.txt -nojournal
-	
+
 clean:
-	rm -rf  *.tmp  *.log  log transcript work *.wlf vsim.fcdb
+	rm -rf  *.tmp  *.log *.jou  log transcript work *.wlf vsim.fcdb
 	rm -rf *~ core csrc simv* vc_hdrs.h ucli.key urg* *.log core.* synlog.tcl
 	rm -rf sim_lib build usage_stat* ipshared/ .Xil runhls.tcl design_1_v_tpg_0_0
 	rm -rf .srcs .gen .cache ../../.gen prj
-	
+
 # really stupid that Vivado creates a ../../.gen folder^, can't figure out why it's not within the build tree
-	
+
 build/design_1/design_1.bd: $(BD_SRC)
 	test -e build || mkdir build
 	vivado -mode batch -source scripts/vivado_bd.tcl -nojournal \
@@ -118,7 +118,7 @@ build/post_place.dcp: build/post_syn.dcp
 
 build/post_route.dcp: build/post_place.dcp
 	vivado -mode batch -source scripts/vivado_route.tcl -log build/route_log.txt -nojournal
-	
-build/imx219_to_mpsoc_displayport.bit: build/post_route.dcp
+
+build/imx219_to_mpsoc_displayport.xsa: build/post_route.dcp
 	vivado -mode batch -source scripts/vivado_bitstream.tcl -log build/bitstream_log.txt -nojournal	\
 	-tclargs "${BOARD}"
