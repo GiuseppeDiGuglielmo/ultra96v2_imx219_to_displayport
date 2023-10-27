@@ -3,7 +3,7 @@
 #   FILENAME: Makefile
 #   AUTHOR: Greg Taylor      CREATION DATE: 17 Oct 2014
 #
-#   DESCRIPTION: 
+#   DESCRIPTION:
 #	Run 'make sim-debug' to debug the design in the Modelsim GUI
 #
 #	Run 'make bitstream' to build the entire design (synthesis, P&R, bitstream)
@@ -16,22 +16,22 @@
 #       Initial version
 #
 #   Copyright (C) 2014 Greg Taylor <gtaylor@sonic.net>
-#    
+#
 #   This file is part of imx219_to_mpsoc_displayport FPGA.
-#    
+#
 #   imx219_to_mpsoc_displayport FPGA is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU Lesser General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
-#   
+#
 #   imx219_to_mpsoc_displayport FPGA is distributed in the hope that it will be useful,
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #   GNU Lesser General Public License for more details.
-#   
+#
 #   You should have received a copy of the GNU Lesser General Public License
 #   along with imx219_to_mpsoc_displayport FPGA.  If not, see <http://www.gnu.org/licenses/>.
-#   
+#
 #******************************************************************************
 uname_O := $(shell sh -c 'uname -o 2>/dev/null || echo not')
 
