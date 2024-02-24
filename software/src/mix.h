@@ -1,5 +1,5 @@
 /*
-FILENAME: main.c
+FILENAME: mix.h
 AUTHOR: Greg Taylor     CREATION DATE: 12 Aug 2019
 
 DESCRIPTION:
@@ -30,35 +30,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#include "platform.h"
-#include "xil_printf.h"
-#include "displayport.h"
-#include "vtc.h"
-#include "imx219.h"
-#include "mipi.h"
-#include "demosaic.h"
-#include "tpg.h"
-#include "mix.h"
-#include "vdma.h"
-#include "gamma_lut.h"
+#ifndef SRC_MIX_H_
+#define SRC_MIX_H_
 
-int main() {
-    init_platform();
+int mix_init();
 
-    xil_printf("Starting...\r\n");
-    displayport_init();
-    displayport_setup_interrupts();
-    vtc_init();
-    mix_init();
-	tpg_init();
-	vdma_init();
-	gamma_lut_init();
-	demosaic_init();
-	mipi_init();
-	imx219_init();
-
-	xil_printf("Entire video pipeline activated\r\n");
-
-    cleanup_platform();
-    return 0;
-}
+#endif /* SRC_MIX_H_ */
