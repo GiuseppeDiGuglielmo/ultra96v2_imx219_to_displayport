@@ -1917,4 +1917,6 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets v_tpg_0_m_axis_video] [get_bd_in
 
 create_root_design ""
 
-
+if { $::ILA != 1 } {
+    delete_bd_objs [get_bd_nets v_axi4s_vid_out_0_underflow] [get_bd_nets v_axi4s_vid_out_0_locked] [get_bd_nets v_tc_0_fsync_out] [get_bd_nets v_axi4s_vid_out_0_status] [get_bd_cells ila_0] [get_bd_cells ila_2] [get_bd_cells ila_3] [get_bd_cells ila_4] [get_bd_cells ila_1]
+}

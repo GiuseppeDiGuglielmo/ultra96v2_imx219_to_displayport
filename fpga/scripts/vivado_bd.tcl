@@ -1,6 +1,8 @@
 set BD_SRC [lindex $argv 0]
 set BOARD [lindex $argv 1]
 
+set ::ILA [lindex $argv 2]
+
 set outputDir build
 
 if {[string equal ${BOARD} "ultra96v2"]} {

@@ -38,6 +38,17 @@ uname_O := $(shell sh -c 'uname -o 2>/dev/null || echo not')
 # set to ultra96v2 or kv260
 BOARD = kv260
 
+GUI ?= 0
+
+ILA ?= 0
+
+ifeq ($(GUI),1)
+MODE = gui
+else
+MODE = batch
+endif
+
+
 RTL_SRC = \
 	
 SIM_SRC = \
@@ -105,20 +116,20 @@ clean:
 	
 build/design_1/design_1.bd: $(BD_SRC)
 	test -e build || mkdir build
-	vivado -mode batch -source scripts/vivado_bd.tcl -nojournal \
-	-log build/bd_log.txt -tclargs "$(BD_SRC)" "${BOARD}"
+	vivado -mode $(MODE) -source scripts/vivado_bd.tcl -nojournal \
+	-log build/bd_log.txt -tclargs "$(BD_SRC)" "${BOARD}" "$(ILA)"
 
 build/post_syn.dcp: $(RTL_SRC) $(IP_SRC) $(XDC_SRC) build/design_1/design_1.bd
 	test -e build || mkdir build
-	vivado -mode batch -source scripts/vivado_syn.tcl -nojournal \
+	vivado -mode $(MODE) -source scripts/vivado_syn.tcl -nojournal \
 	-log build/syn_log.txt -tclargs "$(RTL_SRC)" "$(INC_DIR0)" "$(IP_SRC)" "$(XDC_SRC)" "${BOARD}"
 
 build/post_place.dcp: build/post_syn.dcp
-	vivado -mode batch -source scripts/vivado_place.tcl -log build/place_log.txt -nojournal
+	vivado -mode $(MODE) -source scripts/vivado_place.tcl -log build/place_log.txt -nojournal
 
 build/post_route.dcp: build/post_place.dcp
-	vivado -mode batch -source scripts/vivado_route.tcl -log build/route_log.txt -nojournal
+	vivado -mode $(MODE) -source scripts/vivado_route.tcl -log build/route_log.txt -nojournal
 	
 build/imx219_to_mpsoc_displayport.bit: build/post_route.dcp
-	vivado -mode batch -source scripts/vivado_bitstream.tcl -log build/bitstream_log.txt -nojournal	\
+	vivado -mode $(MODE) -source scripts/vivado_bitstream.tcl -log build/bitstream_log.txt -nojournal	\
 	-tclargs "${BOARD}"
